@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: flight-intelligence-api
+    env: node
+    buildCommand: npm install
+    startCommand: npm start
+    envVars:
+      - key: DUFFEL_TOKEN
+        sync: false
