@@ -7,35 +7,24 @@
 <style>
   * { box-sizing: border-box; margin: 0; padding: 0; }
   body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: #f5f4f0; color: #1a1a18; min-height: 100vh; }
-  
   header { background: #fff; border-bottom: 1px solid #e5e4e0; padding: 16px 24px; display: flex; align-items: center; justify-content: space-between; }
   header h1 { font-size: 18px; font-weight: 600; }
   header p { font-size: 12px; color: #888; margin-top: 2px; }
   .tag { background: #e8f5ee; color: #0f6e56; font-size: 11px; padding: 3px 10px; border-radius: 99px; font-weight: 500; }
-
   .container { max-width: 900px; margin: 0 auto; padding: 24px 16px; }
-
   .search-card { background: #fff; border-radius: 14px; border: 1px solid #e5e4e0; padding: 20px 24px; margin-bottom: 20px; }
   .search-grid { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr auto; gap: 12px; align-items: end; }
   @media(max-width:700px){ .search-grid { grid-template-columns: 1fr 1fr; } }
   .field label { font-size: 12px; color: #666; display: block; margin-bottom: 5px; font-weight: 500; }
   .field input { width: 100%; padding: 9px 12px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; background: #fafaf9; outline: none; transition: border-color 0.15s; }
   .field input:focus { border-color: #378ADD; background: #fff; }
-  .btn-search { background: #378ADD; color: #fff; border: none; border-radius: 8px; padding: 10px 24px; font-size: 14px; font-weight: 600; cursor: pointer; white-space: nowrap; transition: background 0.15s; height: 40px; }
+  .btn-search { background: #378ADD; color: #fff; border: none; border-radius: 8px; padding: 10px 24px; font-size: 14px; font-weight: 600; cursor: pointer; white-space: nowrap; height: 40px; }
   .btn-search:hover { background: #185FA5; }
   .btn-search:disabled { background: #aaa; cursor: not-allowed; }
-
   .status-bar { display: flex; align-items: center; gap: 8px; margin-top: 12px; font-size: 12px; color: #666; }
-  .dot { width: 8px; height: 8px; border-radius: 50%; background: #ccc; }
-  .dot.ok { background: #1D9E75; }
-  .dot.err { background: #E24B4A; }
-  .dot.loading { background: #378ADD; animation: pulse 1s infinite; }
-  @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.4} }
-
-  .results { display: grid; gap: 12px; }
-
-  .flight-card { background: #fff; border-radius: 12px; border: 1px solid #e5e4e0; overflow: hidden; transition: box-shadow 0.15s; }
-  .flight-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.08); }
+  .dot { width: 8px; height: 8px; border-radius: 50%; background: #1D9E75; flex-shrink: 0; }
+  .flight-card { background: #fff; border-radius: 12px; border: 1px solid #e5e4e0; overflow: hidden; margin-bottom: 12px; transition: box-shadow 0.15s; }
+  .flight-card:hover { box-shadow: 0 2px 12px rgba(0,0,0,0.07); }
   .flight-card.best { border-color: #1D9E75; border-width: 2px; }
   .fc-main { padding: 16px 20px; cursor: pointer; }
   .fc-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 12px; flex-wrap: wrap; gap: 8px; }
@@ -46,32 +35,26 @@
   .b-blue { background: #e6f1fb; color: #185FA5; }
   .b-amber { background: #faeeda; color: #854F0B; }
   .b-gray { background: #f1efe8; color: #5F5E5A; }
-  .b-red { background: #fcebeb; color: #A32D2D; }
-
   .fc-route { display: grid; grid-template-columns: auto 1fr auto; gap: 12px; align-items: center; margin-bottom: 14px; }
   .fc-time { font-size: 22px; font-weight: 700; }
   .fc-iata { font-size: 12px; color: #888; margin-top: 2px; }
-  .fc-line { border-top: 1.5px dashed #ddd; position: relative; }
+  .fc-line { border-top: 1.5px dashed #ddd; }
   .fc-dur { font-size: 12px; color: #888; text-align: center; margin-top: 5px; }
   .fc-bottom { display: flex; align-items: flex-end; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
-  .fc-price { font-size: 26px; font-weight: 700; color: #1a1a18; }
-  .fc-price-note { font-size: 12px; color: #888; margin-top: 2px; }
-  .fc-price-save { font-size: 12px; color: #0f6e56; font-weight: 500; margin-top: 2px; }
+  .fc-price { font-size: 26px; font-weight: 700; }
+  .fc-price-brl { font-size: 14px; color: #555; font-weight: 600; margin-top: 3px; }
+  .fc-price-note { font-size: 11px; color: #aaa; margin-top: 2px; }
   .expand-hint { font-size: 12px; color: #aaa; }
-
   .fc-detail { border-top: 1px solid #f0efe8; padding: 16px 20px; display: none; background: #fafaf9; }
   .fc-detail.open { display: block; }
-
   .detail-tabs { display: flex; gap: 6px; margin-bottom: 14px; }
-  .dtab { padding: 5px 14px; border: 1px solid #ddd; border-radius: 99px; font-size: 12px; cursor: pointer; background: transparent; color: #666; transition: all 0.15s; }
+  .dtab { padding: 5px 14px; border: 1px solid #ddd; border-radius: 99px; font-size: 12px; cursor: pointer; background: transparent; color: #666; }
   .dtab.active { background: #fff; color: #1a1a18; font-weight: 500; border-color: #aaa; }
-
-  .price-rows { margin-bottom: 12px; }
+  .price-rows { margin-bottom: 10px; }
   .price-row { display: flex; justify-content: space-between; font-size: 13px; padding: 7px 0; border-bottom: 1px solid #f0efe8; }
   .price-row:last-child { border: none; font-weight: 600; }
   .price-row span:first-child { color: #666; }
-  .price-row.best-row span:last-child { color: #0f6e56; font-weight: 700; }
-
+  .currency-note { font-size: 11px; color: #888; background: #f5f4f0; border-radius: 6px; padding: 6px 10px; display: block; margin-bottom: 12px; }
   .rules-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 8px; margin-bottom: 12px; }
   .rule-box { background: #fff; border: 1px solid #e5e4e0; border-radius: 8px; padding: 10px 12px; }
   .rule-label { font-size: 11px; color: #888; margin-bottom: 3px; }
@@ -79,24 +62,20 @@
   .rule-sub { font-size: 11px; color: #888; margin-top: 2px; }
   .rule-ok { color: #0f6e56; }
   .rule-no { color: #A32D2D; }
-
   .insight { border-left: 2px solid #1D9E75; padding: 8px 12px; font-size: 12px; color: #555; line-height: 1.6; margin-bottom: 8px; border-radius: 0 6px 6px 0; background: #fff; }
   .insight.warn { border-color: #BA7517; }
   .insight.danger { border-color: #E24B4A; }
-
-  .btn-book { background: #1D9E75; color: #fff; border: none; border-radius: 8px; padding: 9px 20px; font-size: 13px; font-weight: 600; cursor: pointer; margin-right: 8px; transition: background 0.15s; }
+  .btn-book { display: inline-block; background: #1D9E75; color: #fff; border: none; border-radius: 8px; padding: 10px 20px; font-size: 13px; font-weight: 600; cursor: pointer; text-decoration: none; margin-top: 8px; }
   .btn-book:hover { background: #0f6e56; }
-  .btn-sec { background: transparent; border: 1px solid #ddd; border-radius: 8px; padding: 9px 16px; font-size: 13px; cursor: pointer; color: #333; transition: background 0.15s; }
-  .btn-sec:hover { background: #f5f4f0; }
-
+  .btn-book.alt { background: #378ADD; }
+  .btn-book.alt:hover { background: #185FA5; }
   .empty { text-align: center; padding: 48px; color: #888; font-size: 14px; }
   .loading-state { text-align: center; padding: 48px; }
   .spinner { width: 32px; height: 32px; border: 3px solid #e5e4e0; border-top-color: #378ADD; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 16px; }
   @keyframes spin { to { transform: rotate(360deg); } }
   .err-box { background: #fcebeb; border: 1px solid #f09595; border-radius: 10px; padding: 14px 18px; font-size: 13px; color: #A32D2D; margin-bottom: 16px; }
-
-  .sources-note { font-size: 11px; color: #aaa; text-align: center; margin-top: 16px; }
   .section-title { font-size: 12px; font-weight: 600; color: #888; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 12px; }
+  .sources-note { font-size: 11px; color: #aaa; text-align: center; margin-top: 16px; padding-bottom: 32px; }
 </style>
 </head>
 <body>
@@ -104,13 +83,12 @@
 <header>
   <div>
     <h1>Flight Intelligence</h1>
-    <p>Preços reais diretos dos sistemas das aéreas — sem markup, sem ordenação paga</p>
+    <p>Preços reais via Duffel NDC — tarifa base + impostos, sem markup</p>
   </div>
-  <span class="tag">powered by Duffel</span>
+  <span class="tag">Beta · dados reais</span>
 </header>
 
 <div class="container">
-
   <div class="search-card">
     <div class="search-grid">
       <div class="field"><label>Origem</label><input id="orig" type="text" placeholder="GRU" maxlength="3" value="GRU" style="text-transform:uppercase"></div>
@@ -120,159 +98,145 @@
       <button class="btn-search" id="btn-search" onclick="doSearch()">Buscar</button>
     </div>
     <div class="status-bar">
-      <div class="dot ok" id="status-dot"></div>
-      <span id="status-text">Backend conectado em <strong>https://flight-backend-85oh.onrender.com</strong></span>
+      <div class="dot"></div>
+      <span>Backend online · <strong>flight-backend-85oh.onrender.com</strong></span>
     </div>
   </div>
-
   <div id="results">
     <div class="empty">Preencha a rota e a data para buscar voos reais.</div>
   </div>
-
 </div>
 
 <script>
 const BACKEND = 'https://flight-backend-85oh.onrender.com';
 
-function fmtTime(iso) { return iso ? iso.slice(11,16) : '--:--'; }
+const AIRLINES = {
+  'IB': { name:'Iberia', search:(o,d,dep)=>`https://www.iberia.com/br/voos/?origin=${o}&destination=${d}&outboundDate=${dep}&adults=1&cabinClass=Y` },
+  'LA': { name:'LATAM', search:(o,d,dep)=>`https://www.latamairlines.com/br/pt/oferta-voos?origin=${o}&outbound=${dep}&destination=${d}&adt=1&inf=0&chd=0&cabin=Y&redemption=false&sort=RECOMMENDED` },
+  'TP': { name:'TAP Air Portugal', search:(o,d,dep)=>`https://www.flytap.com/pt-br/reservar-voos` },
+  'AA': { name:'American Airlines', search:(o,d,dep)=>`https://www.aa.com/booking/search?locale=pt_BR&pax=1&adult=1&type=OneWay&fromCity=${o}&toCity=${d}&departDate=${dep}` },
+  'AD': { name:'Azul', search:(o,d,dep)=>`https://www.voeazul.com.br/voos?origem=${o}&destino=${d}&dataIda=${dep}&adultos=1` },
+  'G3': { name:'GOL', search:(o,d,dep)=>`https://www.voegol.com.br/passagens?origem=${o}&destino=${d}&dataIda=${dep}&adultos=1` },
+  'LH': { name:'Lufthansa', search:(o,d,dep)=>`https://www.lufthansa.com/br/pt/flight-search` },
+  'BA': { name:'British Airways', search:(o,d,dep)=>`https://www.britishairways.com/travel/home/public/pt_br` },
+  'AF': { name:'Air France', search:(o,d,dep)=>`https://www.airfrance.com.br` },
+  'EK': { name:'Emirates', search:(o,d,dep)=>`https://www.emirates.com/br/portuguese/booking/` },
+  'UA': { name:'United', search:(o,d,dep)=>`https://www.united.com/en/us/fsr/choose-flights?f=${o}&t=${d}&d=${dep}&tt=1&at=1&px=1` },
+  'DL': { name:'Delta', search:(o,d,dep)=>`https://www.delta.com/us/en/flight-search/book-a-flight?tripType=ONE_WAY&fromAirportCode=${o}&toAirportCode=${d}&departureDate=${dep}&passengerCount=1` },
+};
+
+const FX = { AUD:3.35, USD:5.10, EUR:5.55, GBP:6.45, CAD:3.75, CHF:5.80, BRL:1 };
+
 function fmtDur(str) {
   if (!str) return '';
-  const m = str.match(/PT(?:(\d+)H)?(?:(\d+)M)?/);
+  const m = str.match(/P(?:(\d+)D)?T?(?:(\d+)H)?(?:(\d+)M)?/);
   if (!m) return str;
-  return `${m[1]||0}h${String(m[2]||0).padStart(2,'0')}m`;
+  const totalH = (parseInt(m[1]||0)*24) + parseInt(m[2]||0);
+  return `${totalH}h${String(parseInt(m[3]||0)).padStart(2,'0')}m`;
 }
-function fmtPrice(amount, currency) {
-  const n = parseFloat(amount);
-  if (currency === 'BRL') return 'R$' + Math.round(n).toLocaleString('pt-BR');
-  return `${currency} ${n.toFixed(2)}`;
-}
+function fmtTime(iso) { return iso ? iso.slice(11,16) : '--:--'; }
 
 async function doSearch() {
   const orig = document.getElementById('orig').value.toUpperCase().trim();
   const dest = document.getElementById('dest').value.toUpperCase().trim();
   const dep  = document.getElementById('dep').value;
   const ret  = document.getElementById('ret').value;
-
-  if (!orig || !dest || !dep) {
-    document.getElementById('results').innerHTML = '<div class="err-box">Preencha origem, destino e data de ida.</div>';
-    return;
-  }
+  if (!orig || !dest || !dep) { document.getElementById('results').innerHTML='<div class="err-box">Preencha origem, destino e data de ida.</div>'; return; }
 
   const btn = document.getElementById('btn-search');
-  btn.disabled = true; btn.textContent = 'Buscando...';
-  document.getElementById('results').innerHTML = `<div class="loading-state"><div class="spinner"></div><p style="color:#888;font-size:14px">Consultando sistemas das aéreas via Duffel…</p></div>`;
+  btn.disabled=true; btn.textContent='Buscando...';
+  document.getElementById('results').innerHTML=`<div class="loading-state"><div class="spinner"></div><p style="color:#888;font-size:14px">Consultando sistemas das aéreas via Duffel…</p></div>`;
 
   try {
-    const body = { origin: orig, destination: dest, date: dep };
+    const body = { origin:orig, destination:dest, date:dep };
     if (ret) body.returnDate = ret;
-
-    const r = await fetch(`${BACKEND}/search`, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(body),
-    });
-
+    const r = await fetch(`${BACKEND}/search`, { method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(body) });
     const data = await r.json();
+    if (!r.ok) { document.getElementById('results').innerHTML=`<div class="err-box">Erro Duffel: ${data?.errors?.[0]?.detail||data?.error||JSON.stringify(data)}</div>`; return; }
 
-    if (!r.ok) {
-      const msg = data?.errors?.[0]?.detail || data?.error || JSON.stringify(data);
-      document.getElementById('results').innerHTML = `<div class="err-box">Erro da API Duffel: ${msg}</div>`;
-      return;
-    }
+    const raw = data?.data?.offers || [];
+    if (!raw.length) { document.getElementById('results').innerHTML='<div class="err-box">Nenhum voo encontrado. Tente outra rota ou data — o sandbox Duffel tem cobertura limitada.</div>'; return; }
 
-    const offers = (data?.data?.offers || [])
-      .slice(0, 8)
-      .map(o => {
-        const slice = o.slices?.[0];
-        const seg   = slice?.segments?.[0];
-        const last  = slice?.segments?.at(-1);
-        const stops = (slice?.segments?.length || 1) - 1;
-        const cond  = o.conditions || {};
-        const bags  = seg?.passengers?.[0]?.baggages;
-        return {
-          id: o.id,
-          airline: seg?.marketing_carrier?.name || seg?.operating_carrier?.name || 'Aérea',
-          iataCode: seg?.marketing_carrier?.iata_code || '',
-          dep: fmtTime(seg?.departing_at),
-          arr: fmtTime(last?.arriving_at),
-          dur: fmtDur(slice?.duration),
-          stops,
-          price: fmtPrice(o.total_amount, o.total_currency),
-          rawPrice: parseFloat(o.total_amount),
-          currency: o.total_currency,
-          baseAmount: o.base_amount,
-          taxAmount: o.tax_amount,
-          refund: cond.refund_before_departure?.allowed,
-          change: cond.change_before_departure?.allowed,
-          hasBag: bags?.some(b => b.type === 'checked' && b.quantity > 0),
-        };
-      })
-      .sort((a, b) => a.rawPrice - b.rawPrice);
+    const offers = raw.slice(0,8).map(o => {
+      const slice=o.slices?.[0], seg=slice?.segments?.[0], last=slice?.segments?.at(-1);
+      const iata=seg?.marketing_carrier?.iata_code||seg?.operating_carrier?.iata_code||'';
+      const cur=o.total_currency, total=parseFloat(o.total_amount);
+      const rate=FX[cur]||5.10;
+      const brl=Math.round(total*rate);
+      const bags=seg?.passengers?.[0]?.baggages;
+      const cond=o.conditions||{};
+      return {
+        iata, airline: seg?.marketing_carrier?.name||seg?.operating_carrier?.name||iata||'Aérea',
+        dep:fmtTime(seg?.departing_at), arr:fmtTime(last?.arriving_at),
+        dur:fmtDur(slice?.duration), stops:(slice?.segments?.length||1)-1,
+        cur, total, brl,
+        base:parseFloat(o.base_amount||0).toFixed(2),
+        tax:parseFloat(o.tax_amount||0).toFixed(2),
+        totalStr:total.toFixed(2),
+        refund:cond.refund_before_departure?.allowed,
+        change:cond.change_before_departure?.allowed,
+        hasBag:bags?.some(b=>b.type==='checked'&&b.quantity>0),
+      };
+    }).sort((a,b)=>a.brl-b.brl);
 
-    if (!offers.length) {
-      document.getElementById('results').innerHTML = '<div class="err-box">Nenhum voo encontrado para esta rota e data. Tente outra data — o sandbox Duffel tem cobertura limitada de rotas.</div>';
-      return;
-    }
-
-    renderOffers(offers, orig, dest, dep);
+    render(offers, orig, dest, dep);
   } catch(e) {
-    document.getElementById('results').innerHTML = `<div class="err-box">Erro: ${e.message}</div>`;
-  } finally {
-    btn.disabled = false; btn.textContent = 'Buscar';
-  }
+    document.getElementById('results').innerHTML=`<div class="err-box">Erro: ${e.message}</div>`;
+  } finally { btn.disabled=false; btn.textContent='Buscar'; }
 }
 
-function renderOffers(offers, orig, dest, dep) {
-  const lowestPrice = offers[0].rawPrice;
-  let html = `<div class="section-title">${offers.length} voos encontrados — ${orig} → ${dest} · ${dep}</div><div class="results">`;
+function render(offers, orig, dest, dep) {
+  let html = `<div class="section-title">${offers.length} voos — ${orig} → ${dest} · ${dep}</div>`;
+  offers.forEach((f,i) => {
+    const isBest=i===0;
+    const al=AIRLINES[f.iata];
+    const bookUrl=al?al.search(orig,dest,dep):`https://www.google.com/travel/flights?hl=pt-BR&tfs=CBwQAhpLEgoyMDI1LTA2LTE1IgIIASoCCANqDQgCEgkvbS8wMjgxMnIMCAISCC9tLzA1bHRucgwIAhIIL20vMDVsdG4%3D`;
+    const btnLabel=al?`Buscar na ${al.name} ↗`:`Ver no Google Flights ↗`;
+    const btnClass=al?'btn-book':'btn-book alt';
 
-  offers.forEach((f, i) => {
-    const isBest = i === 0;
-    const savings = f.rawPrice - lowestPrice;
-    const badges = [
-      isBest ? '<span class="badge b-green">Menor preço</span>' : '',
-      f.stops === 0 ? '<span class="badge b-gray">Direto</span>' : `<span class="badge b-amber">${f.stops} escala</span>`,
-      f.refund ? '<span class="badge b-blue">Reembolsável</span>' : '',
-      f.hasBag ? '<span class="badge b-green">Bagagem incl.</span>' : '',
+    const badges=[
+      isBest?'<span class="badge b-green">Menor preço</span>':'',
+      f.stops===0?'<span class="badge b-gray">Direto</span>':`<span class="badge b-amber">${f.stops} escala</span>`,
+      f.refund?'<span class="badge b-blue">Reembolsável</span>':'',
+      f.hasBag?'<span class="badge b-green">Bagagem incl.</span>':'',
     ].filter(Boolean).join('');
 
-    html += `
+    const isBRL = f.cur==='BRL';
+
+    html+=`
     <div class="flight-card${isBest?' best':''}">
-      <div class="fc-main" onclick="toggleDetail('det${i}','card${i}')">
-        <div class="fc-top">
-          <div class="fc-airline">${f.airline}</div>
-          <div class="badges">${badges}</div>
-        </div>
+      <div class="fc-main" onclick="tog('det${i}')">
+        <div class="fc-top"><div class="fc-airline">${f.airline}</div><div class="badges">${badges}</div></div>
         <div class="fc-route">
           <div><div class="fc-time">${f.dep}</div><div class="fc-iata">${orig}</div></div>
-          <div><div class="fc-line"></div><div class="fc-dur">${f.dur}${f.stops > 0 ? ' · ' + f.stops + ' escala' : ''}</div></div>
+          <div><div class="fc-line"></div><div class="fc-dur">${f.dur}${f.stops>0?' · '+f.stops+' escala':''}</div></div>
           <div style="text-align:right"><div class="fc-time">${f.arr}</div><div class="fc-iata">${dest}</div></div>
         </div>
         <div class="fc-bottom">
           <div>
-            <div class="fc-price">${f.price}</div>
-            <div class="fc-price-note">preço total · via Duffel / NDC</div>
-            ${!isBest && savings > 0 ? `<div style="font-size:12px;color:#A32D2D;margin-top:2px">+${f.currency === 'BRL' ? 'R$'+Math.round(savings).toLocaleString('pt-BR') : savings.toFixed(2)} vs menor preço</div>` : ''}
+            ${isBRL
+              ? `<div class="fc-price">R$${Math.round(f.total).toLocaleString('pt-BR')}</div>`
+              : `<div class="fc-price">${f.cur} ${f.totalStr}</div><div class="fc-price-brl">≈ R$${f.brl.toLocaleString('pt-BR')}</div>`
+            }
+            <div class="fc-price-note">tarifa + impostos · Duffel NDC</div>
           </div>
           <span class="expand-hint">▾ detalhes</span>
         </div>
       </div>
       <div class="fc-detail" id="det${i}">
         <div class="detail-tabs">
-          <button class="dtab active" onclick="switchTab(event,'tp${i}','tg${i}')">Preço</button>
-          <button class="dtab" onclick="switchTab(event,'tr${i}','tg${i}')">Regras</button>
+          <button class="dtab active" onclick="stab(event,'tp${i}','tg${i}')">Preço</button>
+          <button class="dtab" onclick="stab(event,'tr${i}','tg${i}')">Regras</button>
         </div>
         <div id="tg${i}">
           <div id="tp${i}">
             <div class="price-rows">
-              <div class="price-row"><span>Tarifa base</span><span>${f.currency} ${parseFloat(f.baseAmount||0).toFixed(2)}</span></div>
-              <div class="price-row"><span>Impostos e taxas</span><span>${f.currency} ${parseFloat(f.taxAmount||0).toFixed(2)}</span></div>
-              <div class="price-row"><span>Total final</span><span>${f.price}</span></div>
+              <div class="price-row"><span>Tarifa base</span><span>${f.cur} ${f.base}</span></div>
+              <div class="price-row"><span>Impostos e taxas</span><span>${f.cur} ${f.tax}</span></div>
+              <div class="price-row"><span>Total final</span><span>${f.cur} ${f.totalStr}</span></div>
             </div>
-            <div class="insight">Preço confirmado direto do sistema da aérea via Duffel NDC — sem markup de intermediário. Compare com o site da aérea para confirmar.</div>
-            <div style="margin-top:12px">
-              <button class="btn-book" onclick="window.open('https://www.google.com/travel/flights?hl=pt-BR','_blank')">Confirmar na aérea ↗</button>
-            </div>
+            ${!isBRL?`<span class="currency-note">Câmbio estimado (taxa aproximada): ≈ R$${f.brl.toLocaleString('pt-BR')} · Confirme o valor real no site da aérea</span>`:''}
+            <a class="${btnClass}" href="${bookUrl}" target="_blank">${btnLabel}</a>
           </div>
           <div id="tr${i}" style="display:none">
             <div class="rules-grid">
@@ -281,35 +245,29 @@ function renderOffers(offers, orig, dest, dep) {
               <div class="rule-box"><div class="rule-label">Bagagem despachada</div><div class="rule-val ${f.hasBag?'rule-ok':'rule-no'}">${f.hasBag?'Incluída':'Não incluída'}</div></div>
               <div class="rule-box"><div class="rule-label">Fonte</div><div class="rule-val">Duffel NDC</div><div class="rule-sub">direto da aérea</div></div>
             </div>
-            ${f.refund===false?'<div class="insight danger">Não reembolsável — cancelamento = crédito ou perda total. Confirme antes de comprar.</div>':''}
-            ${!f.hasBag?'<div class="insight warn">Bagagem não incluída — adicionar depois pode sair mais caro. Verifique no site da aérea.</div>':''}
+            ${f.refund===false?'<div class="insight danger">Não reembolsável — cancelamento = crédito ou perda total.</div>':''}
+            ${!f.hasBag?'<div class="insight warn">Bagagem não incluída — pode custar mais se adicionar depois.</div>':''}
+            <a class="${btnClass}" href="${bookUrl}" target="_blank">${btnLabel}</a>
           </div>
         </div>
       </div>
     </div>`;
   });
-
-  html += '</div><p class="sources-note">Dados via Duffel API · Sempre confirme o preço final no site da aérea antes de comprar</p>';
-  document.getElementById('results').innerHTML = html;
+  html+=`<p class="sources-note">Dados reais via Duffel API · Preços na moeda original do sistema da aérea com estimativa em BRL · Confirme o valor final no site da aérea</p>`;
+  document.getElementById('results').innerHTML=html;
 }
 
-function toggleDetail(detId) {
-  document.getElementById(detId)?.classList.toggle('open');
-}
-function switchTab(e, targetId, groupId) {
+function tog(id){ document.getElementById(id)?.classList.toggle('open'); }
+function stab(e,tid,gid){
   e.stopPropagation();
-  const g = document.getElementById(groupId);
-  if (g) g.querySelectorAll('[id^="tp"],[id^="tr"]').forEach(el => el.style.display = 'none');
-  const t = document.getElementById(targetId);
-  if (t) t.style.display = 'block';
-  const panel = e.target.closest('.fc-detail');
-  if (panel) panel.querySelectorAll('.dtab').forEach(b => b.classList.remove('active'));
+  document.getElementById(gid)?.querySelectorAll('[id^="tp"],[id^="tr"]').forEach(el=>el.style.display='none');
+  const t=document.getElementById(tid); if(t)t.style.display='block';
+  e.target.closest('.fc-detail')?.querySelectorAll('.dtab').forEach(b=>b.classList.remove('active'));
   e.target.classList.add('active');
 }
 
-// Set default date
-const d = new Date(); d.setDate(d.getDate() + 60);
-document.getElementById('dep').value = d.toISOString().split('T')[0];
+const d=new Date(); d.setDate(d.getDate()+60);
+document.getElementById('dep').value=d.toISOString().split('T')[0];
 </script>
 </body>
 </html>
