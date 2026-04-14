@@ -2,19 +2,31 @@ const express = require('express');
 const cors = require('cors');
 
 const app = express();
-app.use(cors());
+
+app.use(cors({
+  origin: '*',
+  methods: ['GET', 'POST', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
+
+app.options('*', cors());
 app.use(express.json());
 
-const DUFFEL_TOKEN = process.env.DUFFEL_TOKEN || 'SEU_TOKEN_AQUI';
+const DUFFEL_TOKEN = process.env.DUFFEL_TOKEN || '';
 const DUFFEL_BASE = 'https://api.duffel.com';
 
-// Busca de voos
 app.post('/search', async (req, res) => {
   try {
     const { origin, destination, date, returnDate, adults = 1 } = req.body;
 
+    if (!origin || !destination || !date) {
+      return res.status(400).json({ error: 'origin, destination e date são obrigatórios' });
+    }
+
     const slices = [{ origin, destination, departure_date: date }];
-    if (returnDate) slices.push({ origin: destination, destination: origin, departure_date: returnDate });
+    if (returnDate) {
+      slices.push({ origin: destination, destination: origin, departure_date: returnDate });
+    }
 
     const body = {
       data: {
@@ -36,14 +48,19 @@ app.post('/search', async (req, res) => {
     });
 
     const data = await r.json();
-    if (!r.ok) return res.status(r.status).json(data);
+
+    if (!r.ok) {
+      console.error('Duffel error:', JSON.stringify(data));
+      return res.status(r.status).json(data);
+    }
+
     res.json(data);
   } catch (e) {
+    console.error('Server error:', e.message);
     res.status(500).json({ error: e.message });
   }
 });
 
-// Health check
 app.get('/', (_, res) => res.json({ status: 'ok', service: 'flight-intelligence-api' }));
 
 const PORT = process.env.PORT || 3000;
